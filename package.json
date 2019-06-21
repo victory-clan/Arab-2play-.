@@ -30,6 +30,7 @@
     "array-sort": "^1.0.0",
     "table": "^4.0.3",
     "ytdl-core": "^0.20.3"
+    "node-opus":"^0.3.2"
   },
   "engines": {
     "node": "8.4.0"
