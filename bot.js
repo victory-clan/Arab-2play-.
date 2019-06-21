@@ -105,9 +105,9 @@ ${videos.map(video2 => `[\`${++index}\`]${video2.title}`).join('\n')}**`).then(m
         }
         }
     } else if (command === `skip`) {
-        if (!msg.member.voiceChannel) return msg.channel.send('أنت لست بروم صوتي .');
-        if (!serverQueue) return msg.channel.send('لا يتوفر مقطع لتجآوزه');
-        serverQueue.connection.dispatcher.end('تم تجآوز هذآ المقطع');
+        if (!msg.member.voiceChannel) return msg.channel.send('أنت لست بروم صوتي .').then(message =>{message.delete(2000)})
+        if (!serverQueue) return msg.channel.send('لا يتوفر مقطع لتجآوزه').then(message =>{message.delete(2000)})
+        serverQueue.connection.dispatcher.end('تم تجآوز هذآ المقطع').then(message =>{message.delete(2000)})
         return undefined;
     } else if (command === `leave`) {
         if (!msg.member.voiceChannel) return msg.channel.send('أنت لست بروم صوتي .');
@@ -116,42 +116,51 @@ ${videos.map(video2 => `[\`${++index}\`]${video2.title}`).join('\n')}**`).then(m
         serverQueue.connection.dispatcher.end('تم إيقآف هذآ المقطع');
         return undefined;
     } else if (command === `vol`) {
-        if (!msg.member.voiceChannel) return msg.channel.send('أنت لست بروم صوتي .');
-        if (!serverQueue) return msg.channel.send('لا يوجد شيء شغآل.');
-        if (!args[1]) return msg.channel.send(`:loud_sound: مستوى الصوت **${serverQueue.volume}**`);
+        if (!msg.member.voiceChannel) return msg.channel.send('أنت لست بروم صوتي .').then(message =>{message.delete(2000)})
+        if (!serverQueue) return msg.channel.send('لا يوجد شيء شغآل.').then(message =>{message.delete(2000)})
+        if (!args[1]) return msg.channel.send(`:loud_sound: مستوى الصوت **${serverQueue.volume}**`).then(message =>{message.delete(2000)})
         serverQueue.volume = args[1];
         serverQueue.connection.dispatcher.setVolumeLogarithmic(args[1] / 50);
-        return msg.channel.send(`:speaker: تم تغير الصوت الي **${args[1]}**`);
+        return msg.channel.send(`:speaker: تم تغير الصوت الي **${args[1]}**`).then(message =>{message.delete(2000)})
     } else if (command === `np`) {
-        if (!serverQueue) return msg.channel.send('لا يوجد شيء حالي ف العمل.');
+        if (!serverQueue) return msg.channel.send('لا يوجد شيء حالي ف العمل.').then(message =>{message.delete(2000)})
         const embedNP = new Discord.RichEmbed()
-    .setDescription(`:notes: الان يتم تشغيل : **${serverQueue.songs[0].title}**`)
+    .setDescription(`:notes: الان يتم تشغيل : **${serverQueue.songs[0].title}**`).then(message =>{message.delete(2000)})
         return msg.channel.sendEmbed(embedNP);
     } else if (command === `queue`) {
-       
-        if (!serverQueue) return msg.channel.send('لا يوجد شيء حالي ف العمل.');
+        if (!serverQueue) return msg.channel.send('لا يوجد شيء حالي ف العمل.').then(message =>{message.delete(2000)})
         let index = 0;
-       
         const embedqu = new Discord.RichEmbed()
- 
 .setDescription(`**Songs Queue**
 ${serverQueue.songs.map(song => `**${++index} -** ${song.title}`).join('\n')}
-**الان يتم تشغيل** ${serverQueue.songs[0].title}`)
+**الان يتم تشغيل** ${serverQueue.songs[0].title}`).then(message =>{message.delete(2000)})
         return msg.channel.sendEmbed(embedqu);
-    } else if (command === `stop`) {
+    } else if (command === `pause`) {
         if (serverQueue && serverQueue.playing) {
             serverQueue.playing = false;
             serverQueue.connection.dispatcher.pause();
-            return msg.channel.send('تم إيقاف الموسيقى مؤقتا!');
+            return msg.channel.send('تم إيقاف الموسيقى مؤقتا!').then(message =>{message.delete(2000)})
         }
-        return msg.channel.send('لا يوجد شيء حالي ف العمل.');
-    } else if (command === "resume") {
+        return msg.channel.send('لا يوجد شيء حالي ف العمل.').then(message =>{message.delete(2000)})
+    } else if (command === `stop`) {
+        if (!msg.member.voiceChannel) return msg.channel.send('أنت لست بروم صوتي .').then(message =>{message.delete(2000)})
+        if (!serverQueue) return msg.channel.send('لا يتوفر مقطع لإيقآفه');
+        serverQueue.songs = [];
+        serverQueue.connection.dispatcher.end('تم إيقآف هذآ المقطع').then(message =>{message.delete(2000)})
+        return undefined;
+    } else if (command === `replay`) {
+        if (!serverQueue) return msg.channel.send('لا يوجد شيء حالي ف العمل.').then(message =>{message.delete(2000)})
+        const embedNP = new Discord.RichEmbed()
+    .setDescription(`سيتم اعاده تشغيل الفديو :**${serverQueue.songs[0].title}**`)
+    msg.channel.send({embed: embedNP})
+     return handleVideo(video, msg, msg.member.voiceChannel);
+         } else if (command === "resume") {
         if (serverQueue && !serverQueue.playing) {
             serverQueue.playing = true;
             serverQueue.connection.dispatcher.resume();
-            return msg.channel.send('استأنفت الموسيقى بالنسبة لك !');
+            return msg.channel.send('استأنفت الموسيقى بالنسبة لك !').then(message =>{message.delete(2000)})
         }
-        return msg.channel.send('لا يوجد شيء حالي في العمل.');
+        return msg.channel.send('لا يوجد شيء حالي في العمل.').then(message =>{message.delete(2000)})
     }
  
     return undefined;
@@ -257,7 +266,7 @@ client.on("message", message => {
          1play ⇏ لتشغيل أغنية برآبط أو بأسم
          1skip ⇏ لتجآوز الأغنية الحآلية
          1stop ⇏ إيقآف الأغنية مؤقتا
-         1resume ⇏ لموآصلة الإغنية بعد إيقآفهآ مؤقتا
+         1replay ⇏ لموآصلة الإغنية بعد إيقآفهآ مؤقتا
          1vol ⇏ لتغيير درجة الصوت 100 - 0
          1leave⇏ لإخرآج البوت من الروم
          1np ⇏ لمعرفة الأغنية المشغلة حآليا
