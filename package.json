@@ -20,6 +20,7 @@
     "moment": "^2.22.1",
     "ms": "^2.1.1",
     "opusscript": "0.0.6",
+    "node-opus":"^0.3.2",
     "quick.db": "^6.2.0",
     "request": "^2.85.0",
     "simple-youtube-api": "^5.0.2",
@@ -30,7 +31,6 @@
     "array-sort": "^1.0.0",
     "table": "^4.0.3",
     "ytdl-core": "^0.20.3"
-    "node-opus":"^0.3.2"
   },
   "engines": {
     "node": "8.4.0"
