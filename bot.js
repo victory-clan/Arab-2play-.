@@ -104,7 +104,7 @@ ${videos.map(video2 => `[\`${++index}\`]${video2.title}`).join('\n')}**`).then(m
             return handleVideo(video, msg, voiceChannel);
         }
         }
-    } else if (command === `leave`) {
+        if (command === `leave`) {
         if (!msg.member.voiceChannel) return msg.channel.send('أنت لست بروم صوتي .');
         if (!serverQueue) return msg.channel.send('لا يتوفر مقطع لإيقآفه');
         serverQueue.songs = [];
