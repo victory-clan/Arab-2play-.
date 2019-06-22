@@ -18,7 +18,7 @@ client.on('ready', function(){
  game: { 
     type: 1,
      url: 'https://www.twitch.tv/skwadraa',
-    name: 'Arab || 2play',
+    name: 'RG Shop|| 2play',
     application_id: '541681966404075520',
      assets: {
          large_image:   `${s[Math.floor(Math.random() * s.length)]}`,
